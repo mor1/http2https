@@ -3,7 +3,7 @@
 all: mir-http2https
 
 configure: $(wildcard src/*.ml)
-	cd src && mirage configure --dhcp=true --unix
+	cd src && mirage configure --dhcp=true --unix $${MIRFLAGS}
 build: $(wildcard src/*.ml)
 	cd src && make
 
@@ -36,3 +36,5 @@ distclean:
 
 clean:
 	cd src && ( [ -r Makefile -a \! -z Makefile ] && make clean || true )
+	$(RM) log mir-http2https.tar.gz
+	$(RM) -r docker-unikernel-runner

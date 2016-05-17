@@ -7,7 +7,13 @@ homepage: "https://github.com/avsm/http2https"
 bug-reports: "https://github.com/avsm/http2https/issues"
 license: "ISC"
 dev-repo: "https://github.com/avsm/http2https.git"
-build: [ [make] ]
+
+build: [
+  ["opam" "depext" "-n" "http2https"]
+  [make "configure" "MIRFLAGS=--no-opam"]
+  [make "build"]
+]
+
 depends: [
   "ocamlfind" {build}
   "ocamlbuild" {build}
