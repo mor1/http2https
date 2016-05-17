@@ -1,0 +1,6 @@
+FROM mir-runner
+
+RUN apk add gmp
+ADD mir-http2https.tar.gz /unikernel/
+
+CMD ["/unikernel/mir-http2https"]

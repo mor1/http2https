@@ -1,3 +1,7 @@
 _build/
 .*.swp
 *.native
+
+docker-unikernel-runner/
+log
+mir-http2https.tar.gz
