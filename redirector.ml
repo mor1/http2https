@@ -67,4 +67,3 @@ let cmd =
   Term.info "http2https" ~version:"1.0.0" ~doc ~man
 
 let () = match Term.eval cmd with | `Error _ -> exit 1 | _ -> exit 0
-
