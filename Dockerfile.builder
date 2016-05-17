@@ -7,7 +7,7 @@ RUN sudo chown -R opam http2https
 WORKDIR /home/opam/http2https
 
 RUN opam config exec -- opam pin add -n http2https .
-RUN opam config exec -- opam depext http2https
+RUN opam config exec -- opam depext -u http2https
 RUN opam config exec -- mirage configure --net=direct --unix
 RUN opam config exec -- make build
 
