@@ -1,0 +1,6 @@
+PKG lwt lwt.unix functoria logs cohttp tcpip
+PKG mirage mirage-types mirage-unix mirage-http mirage-logs
+PKG mirage-net-unix mirage-console.unix
+
+S src/
+B src/_build/**
