@@ -1,0 +1,58 @@
+#!/bin/sh
+# -*- mode: sh -*-
+
+function usage {
+    [ $# = 0 ] && RV=0 || RV=$1
+    echo "Usage: $0 -f <FROM-PORT:80> -t <TO-PORT:443>" 1>&2
+    exit $RV
+}
+
+FROMP=80
+TOP=443
+while getopts ":f:t:hv" o; do
+    case "${o}" in
+        f)
+            FROMP=$OPTARG
+            ;;
+        t)
+            TOP=$OPTARG
+            ;;
+        v)
+            set -exu
+            VERBOSE=true
+            ;;
+        h)
+            usage
+            ;;
+        *)
+            usage 1
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+if [ -z "$FROMP" ] || [ -z "$TOP" ]; then
+    usage 2
+fi
+
+## fetch the `mir-runner` image if required
+docker pull mor1/mir-runner:latest
+
+## build and run the builder container
+docker build \
+       --build-arg FROMP=$FROMP \
+       --build-arg TOP=$TOP \
+       -t mir-http2https-builder -f Dockerfile.builder .
+docker run --rm mir-http2https-builder >| mir-http2https.tar.gz
+
+## finally, build and run the runner
+docker build -t mir-http2https -f Dockerfile.runner .
+cat <<- __EOF >| run
+docker run -d --name http2https \
+  --device=/dev/net/tun:/dev/net/tun --cap-add=NET_ADMIN \
+  -p $FROMP:$FROMP -p $TOP:$TOP \
+  -- mir-http2https
+__EOF
+chmod +x run
+
+rm -f mir-http2https.tar.gz
