@@ -1,6 +1,25 @@
 FROM ocaml/opam:alpine
-MAINTAINER Anil Madhavapeddy <anil@recoil.org>
-RUN opam pin add -n http2https https://github.com/avsm/http2https.git && \
-    opam depext -u http2https && \
-    opam install -j 2 -y http2https
-ENTRYPOINT ["opam","config","exec","--","http2https"]
+
+RUN opam config exec -- opam depext -i mirage
+
+COPY ["src","Makefile","opam", "http2https/"]
+RUN sudo chown -R opam http2https
+WORKDIR /home/opam/http2https
+
+RUN opam config exec -- opam pin add -n http2https .
+RUN opam config exec -- opam depext -u http2https
+RUN opam config exec -- opam depext \
+         functoria lwt mirage-clock-unix mirage-conduit mirage-console \
+         mirage-http mirage-logs mirage-net-unix mirage-types mirage-types-lwt \
+         mirage-unix nocrypto tcpip
+RUN opam config exec -- opam install --yes \
+         functoria lwt mirage-clock-unix mirage-conduit mirage-console \
+         mirage-http mirage-logs mirage-net-unix mirage-types mirage-types-lwt \
+         mirage-unix nocrypto tcpip
+
+ARG FROMP
+ARG TOP
+RUN opam config exec -- mirage configure --net=direct --unix -p $FROMP -r $TOP
+RUN opam config exec -- make build
+
+CMD tar -C /home/opam/http2https -czh -f - mir-http2https

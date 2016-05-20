@@ -42,7 +42,7 @@ docker pull mor1/mir-runner:latest
 docker build \
        --build-arg FROMP=$FROMP \
        --build-arg TOP=$TOP \
-       -t mir-http2https-builder -f Dockerfile.builder .
+       -t mir-http2https-builder .
 docker run --rm mir-http2https-builder >| mir-http2https.tar.gz
 
 ## finally, build and run the runner
