@@ -3,9 +3,9 @@
 all: mir-http2https
 
 configure: $(wildcard src/*.ml)
-	cd src && mirage configure --dhcp=true --unix $${MIRFLAGS}
+	cd src && mirage configure --net=direct --unix $${MIRFLAGS}
 build: $(wildcard src/*.ml)
-	cd src && make
+	cd src && make build
 
 distclean:
 	mirage clean -f src/config.ml

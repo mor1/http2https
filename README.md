@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mor1/http2https.png?branch=master)](https://travis-ci.org/mor1/http2https)
+
 # http2https
 
 This is a simple redirector unikernel that issues HTTP 302 responses to incoming
