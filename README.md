@@ -4,7 +4,6 @@ This is a simple redirector unikernel that issues HTTP 302 responses to incoming
 HTTP requests. It's useful to use as a listener on port 80 to redirect traffic
 to the corresponding HTTPS port on 443.
 
-
 ## Installation
 
 The image on the Hub at `docker pull mor1/mir-http2https` will listen for HTTP
